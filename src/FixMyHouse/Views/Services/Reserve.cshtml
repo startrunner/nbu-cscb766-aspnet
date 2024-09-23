@@ -1,0 +1,120 @@
+﻿@model ReservationViewModel;
+
+@{
+    ViewData["Title"] = "Резервация на услуга";
+    const string FormId = "the-reserve-form";
+    const string PriceId = "the-final-price";
+    const string SubmitId = "the-submit";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Резервация на услуга</h1>
+    <h3 class="display-4">Изпълнител: @Model.ArtisanFullName</h3>
+    <h3 class="display-4">Услуга: @Model.ServiceName</h3>
+
+    <form asp-controller="Services" asp-action="PostReservation" method="post" id="@FormId">
+        <input type="hidden" asp-for="ArtisanId" />
+        <input type="hidden" asp-for="ServiceId" />
+        <input type="hidden" asp-for="ReservationId" />
+
+
+        <div class="mb-3 form-check">
+            <label for="datetimeInput" class="form-label">Кога?</label>
+            <input asp-for="WhenLocal"
+                   type="datetime-local"
+                   class="form-control d-inline"
+                   id="datetimeInput" describedby="emailHelp">
+            @* <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> *@
+        </div>
+
+        @foreach (ServiceCustomizationViewModel customization in Model.CustomizationDefaults)
+        {
+            Guid customizationId = customization.Id;
+            string fieldId = $"customization-{customization.Id}";
+
+            if (customization is ServiceCustomizationViewModel.Checkbox checkbox)
+            {
+                <div class="mb-3 form-check">
+                    <label class="form-label" for="@fieldId">@customization.Name - @(checkbox.PriceIfChecked)лв</label>
+                    <input asp-for="CustomizationBooleans[customizationId]"
+                           type="checkbox" class="form-check-inline" id="@fieldId">
+                    <small class="form-text text-muted">@customization.Description</small>
+                </div>
+            }
+            if (customization is ServiceCustomizationViewModel.WholeNumber number)
+            {
+                <div class="mb-3 form-check">
+                    <label class="form-label" for="@fieldId">@customization.Name</label>
+                    <input asp-for="CustomizationWholeNumbers[customizationId]" type="number" class="form-control" id="@fieldId" />
+                    <small class="form-text text-muted">@customization.Description</small>
+                </div>
+            }
+            if (customization is ServiceCustomizationViewModel.Options options)
+            {
+                <div class="mb-3 form-check">
+                    <label class="form-label" for="@fieldId">@customization.Name</label>
+                    <select asp-for="CustomizationGuids[customizationId]" class="form-select" id="@fieldId">
+                        @foreach (var option in options.AvailableOptions)
+                        {
+                            <option value="@option.Id" label="@option.Name - @(option.Price)лв" />
+                        }
+                    </select>
+                    <small class="form-text text-muted">@customization.Description</small>
+                </div>
+            }
+        }
+
+        <div class="alert alert-success" role="alert">
+            Крайна цена: <span class="badge bg-success"><span id="@PriceId">... </span>лв</span>
+        </div>
+
+        <button id="@SubmitId" type="submit" class="btn btn-primary" disabled>Заяви услуга</button>
+    </form>
+
+    @section Scripts {
+        <script>
+            (() => {
+                const formId = @Html.Raw(JsonSerializer.Serialize(FormId));
+                const priceId = @Html.Raw(JsonSerializer.Serialize(PriceId));
+                const submitId = @Html.Raw(JsonSerializer.Serialize(SubmitId));
+
+                const form = document.getElementById(formId);
+                const priceElement = document.getElementById(priceId);
+
+                {//Recalculate later if any field changes value
+                    const allFields = [...form.querySelectorAll("input"), ...form.querySelectorAll("select"),];
+                    for (const field of allFields) {
+                        field.addEventListener("change", () => {
+                            console.log(`>>>Changed value of ${field.name}`);
+                            void recalculate();
+                        });
+                    }
+                }
+                {//Recalculate now
+                    void recalculate();
+                }
+
+                {//Enable submit
+                    const submitButton = document.getElementById(submitId);
+                    submitButton.disabled = false;
+                }
+
+
+                async function recalculate() {
+                    const formData = new FormData(form);
+
+                    const formDataSearch = new URLSearchParams();
+                    for (const pair of formData) { formDataSearch.append(pair[0], pair[1]); }
+
+                    //https://stackoverflow.com/questions/46640024/how-do-i-post-form-data-with-fetch-api
+                    const response = await fetch("/Services/Calculate", { method: 'post', body: formDataSearch, });
+                    if (response.status !== 200) { console.error("Bad status code"); return; }
+                    const result = await response.json();
+                    priceElement.innerText = `${result}`;
+                }
+            })();
+        </script>
+    }
+
+    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+</div>

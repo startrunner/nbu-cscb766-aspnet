@@ -1,0 +1,34 @@
+﻿@model IReadOnlyList<ArtisanViewModel>;
+
+@{
+    ViewData["Title"] = "Artisans";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Списък Майстори</h1>
+    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem">
+        @foreach (var artisan in Model)
+        {
+            <div class="card" style="width: 18rem" >
+                <img 
+                    src="/img/@artisan.Picture" 
+                    class="card-img-top" 
+                    alt="Лична снимка на @artisan.FullName"
+                    height="100" width="100"
+                    style="height: 18rem;"
+                >
+                <div class="card-body">
+                    <h5 class="card-title">@artisan.FullName</h5>
+                    <p class="card-text">@artisan.Bio</p>
+                    <a asp-controller="Artisans"
+                       asp-action="View"
+                       asp-route-id="@artisan.Id"
+                       class="btn btn-primary">Виж услугите</a>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

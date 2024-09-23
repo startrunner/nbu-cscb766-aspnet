@@ -1,0 +1,31 @@
+﻿@model ArtisanViewModel;
+
+@{
+    ViewData["Title"] = "Artisans";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.FullName</h1>
+    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem">
+        @foreach (var service in Model.Services)
+        {
+            <div class="card" style="width: 18rem;">
+                <img src="/img/@service.Picture" class="card-img-top" alt="Снимка на @service.Name"
+                     height="100" width="100"
+                     style="height: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@service.Name</h5>
+                    <p class="card-text">@service.Description</p>
+                    <a asp-controller="Services"
+                       asp-action="Reserve"
+                       asp-route-artisanId="@service.ArtisanId"
+                       asp-route-serviceId="@service.ServiceId"
+                       class="btn btn-primary">Заяви услуга</a>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

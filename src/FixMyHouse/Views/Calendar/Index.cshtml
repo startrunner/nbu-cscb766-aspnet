@@ -1,0 +1,93 @@
+﻿@model CalendarViewModel
+@using System.Globalization;
+@{
+    ViewData["Title"] = "My Calendar";
+    List<DayOfWeek> DaysOfWeek = [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday];
+
+    DateOnly firstOfMonth = Model.FirstOfMonth;
+    DateOnly firstOnCalendar = firstOfMonth.AddDays(-DaysOfWeek.IndexOf(firstOfMonth.DayOfWeek));
+    CultureInfo culture = CultureInfo.GetCultureInfo("bg-BG");
+}
+
+<div class="text-center">
+    <h1 class="display-4">Календар</h1>
+    <table class="table" style="table-layout:fixed">
+        @{
+            string monthName = firstOfMonth.ToString("MMMM", culture);
+            monthName = char.ToUpper(monthName[0]) + monthName.Substring(1);
+
+            <tr>
+                <th colspan="@DaysOfWeek.Count">
+                    <div style="display: flex; justify-content: center; gap: 3rem;">
+                        <a class="btn btn-primary"
+                           style="flex:1"
+                           asp-controller="Calendar" asp-action="Index"
+                           asp-route-month="@firstOfMonth.Month" asp-route-year="@(firstOfMonth.Year-1)">@("<<")</a>
+
+                        <a class="btn btn-primary"
+                           style="flex:1"
+                           asp-controller="Calendar" asp-action="Index"
+                           asp-route-month="@(firstOfMonth.AddDays(-3).Month)" asp-route-year="@(firstOfMonth.AddDays(-3).Year)">@("<")</a>
+
+                        <h2 style="flex:3"> @monthName @firstOfMonth.Year </h2>
+
+                        <a class="btn btn-primary"
+                           style="flex:1"
+                           asp-controller="Calendar" asp-action="Index"
+                           asp-route-month="@(firstOfMonth.AddDays(33).Month)" asp-route-year="@(firstOfMonth.AddDays(33).Year)">@(">")</a>
+
+                        <a class="btn btn-primary"
+                           style="flex:1"
+                           asp-controller="Calendar" asp-action="Index"
+                           asp-route-month="@firstOfMonth.Month" asp-route-year="@(firstOfMonth.Year+1)">@(">>")</a>
+
+                    </div>
+                </th>
+            </tr>
+        }
+
+        <tr>
+            @foreach (var dayOfWeek in DaysOfWeek)
+            {
+                <th style="border: 1px solid gray">@(dayOfWeek.ToString().Substring(0, 3))</th>
+            }
+        </tr>
+
+        @{
+            DateOnly currentDay = firstOnCalendar;
+        }
+
+        @for (int row = 1; row <= 6; row++)
+        {
+            <tr>
+                @foreach (var dayOfWeek in DaysOfWeek)
+                {
+                    bool isCurrentMonth = currentDay.Month == firstOfMonth.Month;
+                    IReadOnlyList<CalendarReservationViewModel> reservationsForDay = Model.Reservations.GetValueOrDefault(currentDay, []);
+
+                    <td style="border: 1px solid gray;">
+                        <div style="min-height:5rem; display: flex; flex-direction: column">
+                            <div style="display: flex"> <span class="badge bg-@(isCurrentMonth?"info":"secondary")">@currentDay.Day</span> </div>
+                            @foreach (CalendarReservationViewModel reservation in reservationsForDay)
+                            {
+                                string title = $"{reservation.Time}: {reservation.ArtisanFirstName}: {reservation.ServiceName}";
+                                <a asp-controller="Services"
+                                   asp-action="EditReservation"
+                                   asp-route-reservationId="@reservation.ReservationId"
+                                   style="font-size: 0.9rem;">
+                                    <span class="badge bg-primary">@title</span>
+                                </a>
+                            }
+                        </div>
+                    </td>
+
+                    currentDay = currentDay.AddDays(1);
+                }
+            </tr>
+        }
+    </table>
+</div>
+
+@{
+
+}
