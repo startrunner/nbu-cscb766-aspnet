@@ -14,13 +14,13 @@
 
 Парола по подразбиране: `123456`
 
-![default-login](.\docs-images\default-login.png)
+![default-login](./docs-images/default-login.png)
 
 ### Начална страница
 
 ##### Статична начална страница с маркетингова информация. 
 
-![homepage](.\docs-images\homepage.png)
+![homepage](./docs-images/homepage.png)
 
 ### Списък с майстори
 
@@ -28,7 +28,7 @@
 
 > Бутонът **"Виж услугите"** отваря страницата на съответния майстор.
 
-![artisans-list](.\docs-images\artisans-list.png)
+![artisans-list](./docs-images/artisans-list.png)
 
 ### Страница на майстор
 
@@ -36,7 +36,7 @@
 
 > Бутонът **"Заяви услуга"** отваря формуляра за заявяване на услуга
 
-![artisan-page](.\docs-images\artisan-page.png)
+![artisan-page](./docs-images/artisan-page.png)
 
 ### Формуляр за запазване заявяване на услуга
 
@@ -50,7 +50,7 @@
 
 >  Бутонът **"Заяви услуга"** ще заяви съответната услуга с избраните опции и ще пренасочи към календара на дейностите за съответния месец.
 
-![service-form](.\docs-images\service-form.png)
+![service-form](./docs-images/service-form.png)
 
 ### Календар на услугите
 
@@ -62,4 +62,4 @@
 
 > Сините бутони `<<` `<` `>` `>>` са за преместване в предишен/следващ месец или година.
 
-![services-calendar](.\docs-images\services-calendar.png)
+![services-calendar](./docs-images/services-calendar.png)
