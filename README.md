@@ -14,7 +14,7 @@
 
 Парола по подразбиране: `123456`
 
-![default-login](.\docs-images\default-login.png)
+![default-login](./docs-images/default-login.png)
 
 ### Начална страница
 
