@@ -49,42 +49,36 @@ namespace FixMyHouse.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "ArtisanEntity",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_ArtisanEntity", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ServiceEntity",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_ServiceEntity", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ArtisanServiceEntity",
-                columns: table => new
-                {
+                columns: table => new {
                     Ref_Artisan = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Ref_Service = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CustomizationDefaults = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_ArtisanServiceEntity", x => new { x.Ref_Artisan, x.Ref_Service });
                     table.ForeignKey(
                         name: "FK_ArtisanServiceEntity_ArtisanEntity_Ref_Artisan",

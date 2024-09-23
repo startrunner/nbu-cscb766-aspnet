@@ -37,25 +37,21 @@ internal static class ModelMapping
         );
     }
 
-    public static ServiceCustomizationViewModel ToViewModel(this ServiceCustomizationEntity entity) => entity switch
-    {
-        ServiceCustomizationEntity.Checkbox cb => new ServiceCustomizationViewModel.Checkbox
-        {
+    public static ServiceCustomizationViewModel ToViewModel(this ServiceCustomizationEntity entity) => entity switch {
+        ServiceCustomizationEntity.Checkbox cb => new ServiceCustomizationViewModel.Checkbox {
             Id = cb.Id,
             Name = cb.Name,
             Description = cb.Description,
             PriceIfChecked = cb.ValueIfTrue,
             //Value = cb.Value
         },
-        ServiceCustomizationEntity.WholeNumber wn => new ServiceCustomizationViewModel.WholeNumber
-        {
+        ServiceCustomizationEntity.WholeNumber wn => new ServiceCustomizationViewModel.WholeNumber {
             Id = wn.Id,
             Description = wn.Description,
             Name = wn.Name,
             //Value = wn.Value,
         },
-        ServiceCustomizationEntity.Options opt => new ServiceCustomizationViewModel.Options
-        {
+        ServiceCustomizationEntity.Options opt => new ServiceCustomizationViewModel.Options {
             Id = opt.Id,
             Description = opt.Description,
             Name = opt.Name,

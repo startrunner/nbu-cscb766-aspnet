@@ -13,8 +13,7 @@ namespace FixMyHouse.Data.Migrations
         {
             migrationBuilder.CreateTable(
                 name: "ServiceReservations",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WhenUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CalculatedPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -22,8 +21,7 @@ namespace FixMyHouse.Data.Migrations
                     Ref_Service = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Ref_User = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_ServiceReservations", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ServiceReservations_Artisans_Ref_Artisan",

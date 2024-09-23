@@ -62,15 +62,12 @@ public class ServicesController : BaseController
 
         DateTime now = DateTime.Now;
 
-        ReservationViewModel model = new()
-        {
+        ReservationViewModel model = new() {
             ReservationId = existingEntity?.Id,
             ArtisanId = artisanService.Artisan.Id,
             ServiceId = artisanService.Service.Id,
-            WhenLocal = existingEntity switch
-            {
-                null => new DateTime(now.Year, now.Month, now.Day, 12, 0, 0, DateTimeKind.Unspecified).AddDays(Random.Shared.Next(10)),
-                { } => new DateTime(existingEntity.WhenUtc.Ticks, DateTimeKind.Unspecified) + TimeZoneOffset,
+            WhenLocal = existingEntity switch {
+                null => new DateTime(now.Year, now.Month, now.Day, 12, 0, 0, DateTimeKind.Unspecified).AddDays(Random.Shared.Next(10)), { } => new DateTime(existingEntity.WhenUtc.Ticks, DateTimeKind.Unspecified) + TimeZoneOffset,
             },
             ServiceName = artisanService.Service.Name,
             ArtisanFullName = $"{artisanService.Artisan.FirstName} {artisanService.Artisan.LastName}",
@@ -131,8 +128,7 @@ public class ServicesController : BaseController
         }
         else
         {
-            _db.ServiceReservations.Add(new()
-            {
+            _db.ServiceReservations.Add(new() {
                 Id = Guid.NewGuid(),
                 CalculatedPrice = calculatedPrice,
                 Ref_Artisan = entity.Ref_Artisan,

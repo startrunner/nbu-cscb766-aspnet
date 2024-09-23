@@ -2,7 +2,7 @@
 
 internal static class Extensions
 {
-     public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> map, TKey key, Func<TValue> factory)
+    public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> map, TKey key, Func<TValue> factory)
     {
         if (!map.TryGetValue(key, out TValue? value))
         {
